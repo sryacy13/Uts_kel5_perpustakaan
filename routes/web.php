@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\BukuController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KoleksiController;
+use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,11 +24,16 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['au
 // Dashboard khusus admin
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard');
+    Route::resource('buku', BukuController::class);
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::resource('peminjaman', PeminjamanController::class);
+
 });
 
 // Dashboard khusus user biasa
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/user/dashboard', [DashboardController::class, 'user'])->name('user.dashboard');
+    Route::resource('koleksi', KoleksiController::class)->only(['index', 'create', 'store']);
 });
 
 // Profil pengguna (bawaan Laravel Breeze)
