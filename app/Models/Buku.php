@@ -9,10 +9,18 @@ class Buku extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['judul', 'penulis', 'penerbit', 'tahun_terbit'];
+    // ✅ Tambahkan 'cover' ke fillable agar bisa disimpan ke database
+    protected $fillable = ['judul', 'penulis', 'penerbit', 'tahun_terbit', 'cover'];
 
+    // Relasi ke tabel peminjaman (jika masih digunakan)
     public function peminjaman()
     {
         return $this->hasMany(Peminjaman::class);
+    }
+
+    // Relasi ke tabel transaksi
+    public function transaksis()
+    {
+        return $this->hasMany(Transaksi::class);
     }
 }

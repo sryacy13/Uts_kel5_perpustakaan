@@ -1,71 +1,58 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="min-h-screen flex items-center justify-center bg-gray-50">
-        <div class="bg-white border border-gray-200 rounded-xl p-8 w-full max-w-xl shadow-md animate-fade-in">
-            <h1 class="text-2xl font-semibold text-center text-gray-800 mb-2">Dashboard Admin</h1>
-            <p class="text-center text-gray-600 mb-6">Selamat datang, {{ Auth::user()->name }}. Anda login sebagai
-                <strong>Admin</strong>.
-            </p>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
 
+    {{-- Welcome Message --}}
+    <div class="bg-blue-100 text-blue-800 px-6 py-4 rounded mb-8 shadow text-xl font-semibold">
+        👋 Selamat datang, <strong>Admin</strong>! Anda login sebagai <strong>Administrator</strong>.
+    </div>
 
+    {{-- Filter Bulan --}}
+    <div class="mb-10">
+        <label for="bulan" class="block text-lg font-semibold text-gray-700 mb-2">📅 Filter Bulan</label>
+        <select id="bulan" name="bulan" class="border border-gray-300 rounded-lg px-4 py-3 w-full max-w-xs text-base focus:outline-none focus:ring-2 focus:ring-blue-500">
+            @foreach(['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'] as $bulan)
+                <option>{{ $bulan }}</option>
+            @endforeach
+        </select>
+    </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {{-- Kartu Data Pengguna --}}
-                <div
-                    class="bg-white border border-purple-300 rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="bg-purple-100 p-3 rounded-full">
-                            <span class="text-2xl">📚</span>
-                        </div>
-                        <div>
-                            <h2 class="text-xl font-semibold text-purple-700">Kelola Buku</h2>
-                            <p class="text-sm text-gray-600">Tambah, edit, atau hapus data buku dalam sistem.</p>
-                        </div>
-                    </div>
-                    <a href="{{ route('buku.index') }}"
-                        class="bg-blue-600 inline-block bg-gradient-to-r from-purple-500 to-purple-700 text-white px-4 py-2 rounded-md hover:from-purple-600 hover:to-purple-800 transition">
-                        Kelola Buku
-                    </a>
-                </div>
+    {{-- Statistik Card --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div class="bg-blue-600 text-white rounded-2xl p-8 shadow-xl flex flex-col justify-between min-h-[160px]">
+            <div class="text-xl font-semibold mb-3">📚 Total Buku</div>
+            <div class="text-5xl font-bold">{{ $totalBuku }}</div>
+        </div>
 
-                <div
-                    class="bg-white border border-purple-300 rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="bg-purple-100 p-3 rounded-full">
-                            <span class="text-2xl">👥</span>
-                        </div>
-                        <div>
-                            <h2 class="text-xl font-semibold text-purple-700">Data Pengguna</h2>
-                            <p class="text-sm text-gray-600">Lihat daftar user yang terdaftar di sistem.</p>
-                        </div>
-                    </div>
-                    <a href="{{ route('users.index') }}"
-                        class="bg-purple-600 inline-block bg-gradient-to-r from-purple-500 to-purple-700 text-white px-4 py-2 rounded-md hover:from-purple-600 hover:to-purple-800 transition">
-                        Lihat Pengguna
-                    </a>
-                </div>
+        <div class="bg-green-600 text-white rounded-2xl p-8 shadow-xl flex flex-col justify-between min-h-[160px]">
+            <div class="text-xl font-semibold mb-3">📥 Total Peminjam</div>
+            <div class="text-5xl font-bold">{{ $totalPeminjam }}</div>
+        </div>
 
-                {{-- Kartu Data Peminjaman --}}
-                <div
-                    class="bg-white border border-indigo-300 rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="bg-indigo-100 p-3 rounded-full">
-                            <span class="text-2xl">📖</span>
-                        </div>
-                        <div>
-                            <h2 class="text-xl font-semibold text-indigo-700">Data Peminjaman</h2>
-                            <p class="text-sm text-gray-600">Lihat data user yang meminjam buku.</p>
-                        </div>
-                    </div>
-                    <a href="{{ route('peminjaman.index') }}"
-                        class=" bg-red-600 inline-block bg-gradient-to-r from-indigo-500 to-indigo-700 text-white px-4 py-2 rounded-md hover:from-indigo-600 hover:to-indigo-800 transition">
-                        Lihat Data Peminjam
-                    </a>
-                </div>
-            </div>
+        <div class="bg-yellow-500 text-white rounded-2xl p-8 shadow-xl flex flex-col justify-between min-h-[160px]">
+            <div class="text-xl font-semibold mb-3">👥 Total Anggota</div>
+            <div class="text-5xl font-bold">{{ $totalAnggota }}</div>
+        </div>
 
+        <div class="bg-red-500 text-white rounded-2xl p-8 shadow-xl flex flex-col justify-between min-h-[160px]">
+            <div class="text-xl font-semibold mb-3">👀 Pengunjung Hari Ini</div>
+            <div class="text-5xl font-bold">{{ $pengunjungHariIni }}</div>
         </div>
     </div>
-    </div>
+
+   {{-- Grafik Placeholder --}}
+<div class="bg-white border-4 border-dashed border-gray-300 rounded-2xl shadow p-8 text-center text-gray-400 text-xl italic">
+    📊 Grafik Statistik Pengunjung (Coming Soon)
+</div>
+
+{{-- Tambahan di bawah grafik --}}
+<div class="mt-6 text-center text-sm text-gray-600">
+    💡 Fitur grafik ini akan menampilkan tren kunjungan, peminjaman, dan aktivitas anggota setiap bulan.
+    <br>
+    Pantau statistik harian & bulanan untuk mengoptimalkan pengelolaan perpustakaan.
+</div>
+
+
+</div>
 @endsection

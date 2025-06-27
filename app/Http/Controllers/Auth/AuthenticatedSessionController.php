@@ -9,7 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-
+use Carbon\Carbon; 
 class AuthenticatedSessionController extends Controller
 {
     /**
@@ -24,14 +24,17 @@ class AuthenticatedSessionController extends Controller
      * Handle an incoming authentication request.
      */
     public function store(LoginRequest $request): RedirectResponse
-    {
-        $request->authenticate();
+{
+    $request->authenticate();
+    $request->session()->regenerate();
 
-        $request->session()->regenerate();
+    // Update waktu login terakhir
+    $user = Auth::user();
+    $user->last_login_at = Carbon::now(); // Gunakan Carbon agar konsisten
+    $user->save();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
-    }
-
+    return redirect()->intended(RouteServiceProvider::HOME);
+}
     /**
      * Destroy an authenticated session.
      */

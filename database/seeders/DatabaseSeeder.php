@@ -1,7 +1,7 @@
 <?php
 
 namespace Database\Seeders;
-
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 
@@ -16,15 +16,15 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Admin',
             'email' => 'admin@mail.com',
-            'password' => bcrypt('password'),
+            'password' => Hash::make('password'),
             'role' => 'admin',
         ]);
 
-        // Seeder untuk user biasa
+        // Seeder untuk user biasa 
         User::create([
             'name' => 'User Biasa',
             'email' => 'user@mail.com',
-            'password' => bcrypt('password'),
+            'password' => Hash::make('password'),
             'role' => 'user',
         ]);
     }

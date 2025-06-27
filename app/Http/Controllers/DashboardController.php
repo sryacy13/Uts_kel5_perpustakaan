@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Buku;
+use App\Models\Peminjaman;
 
 class DashboardController extends Controller
 {
@@ -19,11 +22,30 @@ class DashboardController extends Controller
 
     public function admin()
     {
-        return view('dashboard.admin');
+        $totalBuku = Buku::count();
+        $totalPeminjam = Peminjaman::count();
+        $totalAnggota = User::where('role', 'user')->count();
+        $pengunjungHariIni = User::whereDate('last_login_at', today())->count();
+
+        return view('dashboard.admin', compact(
+            'totalBuku',
+            'totalPeminjam',
+            'totalAnggota',
+            'pengunjungHariIni'
+        ));
     }
 
-    public function user()
+    public function user(Request $request)
     {
-        return view('dashboard.user');
+        $query = Buku::query();
+
+        // Filter pencarian berdasarkan judul buku
+        if ($request->has('search') && $request->search !== '') {
+            $query->where('judul', 'like', '%' . $request->search . '%');
+        }
+
+        $bukus = $query->paginate(10); // Pagination 10 buku per halaman
+
+        return view('dashboard.user', compact('bukus'));
     }
 }
